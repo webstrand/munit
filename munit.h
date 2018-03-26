@@ -201,97 +201,97 @@ void munit_errorf_ex(const char* filename, int line, const char* format, ...);
 #define munit_error(msg) \
   munit_errorf("%s", msg)
 
-#define munit_assert(expr) \
+#define munit_assert_impl(expr, expr_str) \
   do { \
     if (!MUNIT_LIKELY(expr)) { \
-      munit_error("assertion failed: " #expr); \
+      munit_error("assertion failed: " expr_str); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_true(expr) \
+#define munit_assert_true_impl(expr, expr_str) \
   do { \
     if (!MUNIT_LIKELY(expr)) { \
-      munit_error("assertion failed: " #expr " is not true"); \
+      munit_error("assertion failed: " expr_str " is not true"); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_false(expr) \
+#define munit_assert_false_impl(expr, expr_str) \
   do { \
     if (!MUNIT_LIKELY(!(expr))) { \
-      munit_error("assertion failed: " #expr " is not false"); \
+      munit_error("assertion failed: " expr_str " is not false"); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_type_full(prefix, suffix, T, fmt, a, op, b)   \
+#define munit_assert_type_full_impl(prefix, suffix, T, fmt, a, op, b, a_str, op_str, b_str)   \
   do { \
     T munit_tmp_a_ = (a); \
     T munit_tmp_b_ = (b); \
     if (!(munit_tmp_a_ op munit_tmp_b_)) {                               \
-      munit_errorf("assertion failed: " #a " " #op " " #b " (" prefix "%" fmt suffix " " #op " " prefix "%" fmt suffix ")", \
+      munit_errorf("assertion failed: " a_str " " op_str " " b_str " (" prefix "%" fmt suffix " " op_str " " prefix "%" fmt suffix ")", \
                    munit_tmp_a_, munit_tmp_b_); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_type(T, fmt, a, op, b) \
-  munit_assert_type_full("", "", T, fmt, a, op, b)
+#define munit_assert_type_impl(T, fmt, a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_full_impl("", "", T, fmt, a, op, b, a_str, op_str, b_str)
 
-#define munit_assert_char(a, op, b) \
-  munit_assert_type_full("'\\x", "'", char, "02" MUNIT_CHAR_MODIFIER "x", a, op, b)
-#define munit_assert_uchar(a, op, b) \
-  munit_assert_type_full("'\\x", "'", unsigned char, "02" MUNIT_CHAR_MODIFIER "x", a, op, b)
-#define munit_assert_short(a, op, b) \
-  munit_assert_type(short, MUNIT_SHORT_MODIFIER "d", a, op, b)
-#define munit_assert_ushort(a, op, b) \
-  munit_assert_type(unsigned short, MUNIT_SHORT_MODIFIER "u", a, op, b)
-#define munit_assert_int(a, op, b) \
-  munit_assert_type(int, "d", a, op, b)
-#define munit_assert_uint(a, op, b) \
-  munit_assert_type(unsigned int, "u", a, op, b)
-#define munit_assert_long(a, op, b) \
-  munit_assert_type(long int, "ld", a, op, b)
-#define munit_assert_ulong(a, op, b) \
-  munit_assert_type(unsigned long int, "lu", a, op, b)
-#define munit_assert_llong(a, op, b) \
-  munit_assert_type(long long int, "lld", a, op, b)
-#define munit_assert_ullong(a, op, b) \
-  munit_assert_type(unsigned long long int, "llu", a, op, b)
+#define munit_assert_char_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_full_impl("'\\x", "'", char, "02" MUNIT_CHAR_MODIFIER "x", a, op, b, a_str, op_str, b_str)
+#define munit_assert_uchar_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_full_impl("'\\x", "'", unsigned char, "02" MUNIT_CHAR_MODIFIER "x", a, op, b, a_str, op_str, b_str)
+#define munit_assert_short_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(short, MUNIT_SHORT_MODIFIER "d", a, op, b, a_str, op_str, b_str)
+#define munit_assert_ushort_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(unsigned short, MUNIT_SHORT_MODIFIER "u", a, op, b, a_str, op_str, b_str)
+#define munit_assert_int_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(int, "d", a, op, b, a_str, op_str, b_str)
+#define munit_assert_uint_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(unsigned int, "u", a, op, b, a_str, op_str, b_str)
+#define munit_assert_long_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(long int, "ld", a, op, b, a_str, op_str, b_str)
+#define munit_assert_ulong_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(unsigned long int, "lu", a, op, b, a_str, op_str, b_str)
+#define munit_assert_llong_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(long long int, "lld", a, op, b, a_str, op_str, b_str)
+#define munit_assert_ullong_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(unsigned long long int, "llu", a, op, b, a_str, op_str, b_str)
 
-#define munit_assert_size(a, op, b) \
-  munit_assert_type(size_t, MUNIT_SIZE_MODIFIER "u", a, op, b)
+#define munit_assert_size_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(size_t, MUNIT_SIZE_MODIFIER "u", a, op, b, a_str, op_str, b_str)
 
-#define munit_assert_float(a, op, b) \
-  munit_assert_type(float, "f", a, op, b)
-#define munit_assert_double(a, op, b) \
-  munit_assert_type(double, "g", a, op, b)
-#define munit_assert_ptr(a, op, b) \
-  munit_assert_type(const void*, "p", a, op, b)
+#define munit_assert_float_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(float, "f", a, op, b, a_str, op_str, b_str)
+#define munit_assert_double_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(double, "g", a, op, b, a_str, op_str, b_str)
+#define munit_assert_ptr_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(const void*, "p", a, op, b, a_str, op_str, b_str)
 
-#define munit_assert_int8(a, op, b)             \
-  munit_assert_type(munit_int8_t, PRIi8, a, op, b)
-#define munit_assert_uint8(a, op, b) \
-  munit_assert_type(munit_uint8_t, PRIu8, a, op, b)
-#define munit_assert_int16(a, op, b) \
-  munit_assert_type(munit_int16_t, PRIi16, a, op, b)
-#define munit_assert_uint16(a, op, b) \
-  munit_assert_type(munit_uint16_t, PRIu16, a, op, b)
-#define munit_assert_int32(a, op, b) \
-  munit_assert_type(munit_int32_t, PRIi32, a, op, b)
-#define munit_assert_uint32(a, op, b) \
-  munit_assert_type(munit_uint32_t, PRIu32, a, op, b)
-#define munit_assert_int64(a, op, b) \
-  munit_assert_type(munit_int64_t, PRIi64, a, op, b)
-#define munit_assert_uint64(a, op, b) \
-  munit_assert_type(munit_uint64_t, PRIu64, a, op, b)
+#define munit_assert_int8_impl(a, op, b, a_str, op_str, b_str)             \
+  munit_assert_type_impl(munit_int8_t, PRIi8, a, op, b, a_str, op_str, b_str)
+#define munit_assert_uint8_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(munit_uint8_t, PRIu8, a, op, b, a_str, op_str, b_str)
+#define munit_assert_int16_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(munit_int16_t, PRIi16, a, op, b, a_str, op_str, b_str)
+#define munit_assert_uint16_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(munit_uint16_t, PRIu16, a, op, b, a_str, op_str, b_str)
+#define munit_assert_int32_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(munit_int32_t, PRIi32, a, op, b, a_str, op_str, b_str)
+#define munit_assert_uint32_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(munit_uint32_t, PRIu32, a, op, b, a_str, op_str, b_str)
+#define munit_assert_int64_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(munit_int64_t, PRIi64, a, op, b, a_str, op_str, b_str)
+#define munit_assert_uint64_impl(a, op, b, a_str, op_str, b_str) \
+  munit_assert_type_impl(munit_uint64_t, PRIu64, a, op, b, a_str, op_str, b_str)
 
-#define munit_assert_double_equal(a, b, precision) \
+#define munit_assert_double_equal_impl(a, b, precision, a_str, b_str, precision_str) \
   do { \
     const double munit_tmp_a_ = (a); \
     const double munit_tmp_b_ = (b); \
@@ -299,7 +299,7 @@ void munit_errorf_ex(const char* filename, int line, const char* format, ...);
       -(munit_tmp_a_ - munit_tmp_b_) : \
       (munit_tmp_a_ - munit_tmp_b_); \
     if (MUNIT_UNLIKELY(munit_tmp_diff_ > 1e-##precision)) { \
-      munit_errorf("assertion failed: " #a " == " #b " (%0." #precision "g == %0." #precision "g)", \
+      munit_errorf("assertion failed: " a_str " == " b_str " (%0." precision_str "g == %0." precision_str "g)", \
 		   munit_tmp_a_, munit_tmp_b_); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
@@ -307,31 +307,31 @@ void munit_errorf_ex(const char* filename, int line, const char* format, ...);
   MUNIT__POP_DISABLE_MSVC_C4127
 
 #include <string.h>
-#define munit_assert_string_equal(a, b) \
+#define munit_assert_string_equal_impl(a, b, a_str, b_str) \
   do { \
     const char* munit_tmp_a_ = a; \
     const char* munit_tmp_b_ = b; \
     if (MUNIT_UNLIKELY(strcmp(munit_tmp_a_, munit_tmp_b_) != 0)) { \
-      munit_errorf("assertion failed: string " #a " == " #b " (\"%s\" == \"%s\")", \
+      munit_errorf("assertion failed: string " a_str " == " b_str " (\"%s\" == \"%s\")", \
                    munit_tmp_a_, munit_tmp_b_); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_string_not_equal(a, b) \
+#define munit_assert_string_not_equal_impl(a, b, a_str, b_str) \
   do { \
     const char* munit_tmp_a_ = a; \
     const char* munit_tmp_b_ = b; \
     if (MUNIT_UNLIKELY(strcmp(munit_tmp_a_, munit_tmp_b_) == 0)) { \
-      munit_errorf("assertion failed: string " #a " != " #b " (\"%s\" == \"%s\")", \
+      munit_errorf("assertion failed: string " a_str " != " b_str " (\"%s\" == \"%s\")", \
                    munit_tmp_a_, munit_tmp_b_); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_memory_equal(size, a, b) \
+#define munit_assert_memory_equal_impl(size, a, b, a_str, b_str) \
   do { \
     const unsigned char* munit_tmp_a_ = (const unsigned char*) (a); \
     const unsigned char* munit_tmp_b_ = (const unsigned char*) (b); \
@@ -340,7 +340,7 @@ void munit_errorf_ex(const char* filename, int line, const char* format, ...);
       size_t munit_tmp_pos_; \
       for (munit_tmp_pos_ = 0 ; munit_tmp_pos_ < munit_tmp_size_ ; munit_tmp_pos_++) { \
         if (munit_tmp_a_[munit_tmp_pos_] != munit_tmp_b_[munit_tmp_pos_]) { \
-          munit_errorf("assertion failed: memory " #a " == " #b ", at offset %" MUNIT_SIZE_MODIFIER "u", munit_tmp_pos_); \
+          munit_errorf("assertion failed: memory " a_str " == " b_str ", at offset %" MUNIT_SIZE_MODIFIER "u", munit_tmp_pos_); \
           break; \
         } \
       } \
@@ -349,30 +349,30 @@ void munit_errorf_ex(const char* filename, int line, const char* format, ...);
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_memory_not_equal(size, a, b) \
+#define munit_assert_memory_not_equal_impl(size, a, b, a_str, b_str) \
   do { \
     const unsigned char* munit_tmp_a_ = (const unsigned char*) (a); \
     const unsigned char* munit_tmp_b_ = (const unsigned char*) (b); \
     const size_t munit_tmp_size_ = (size); \
     if (MUNIT_UNLIKELY(memcmp(munit_tmp_a_, munit_tmp_b_, munit_tmp_size_)) == 0) { \
-      munit_errorf("assertion failed: memory" #a " != " #b " (%zu bytes)", munit_tmp_size_); \
+      munit_errorf("assertion failed: memory" a_str " != " b_str " (%zu bytes)", munit_tmp_size_); \
     } \
     MUNIT__PUSH_DISABLE_MSVC_C4127 \
   } while (0) \
   MUNIT__POP_DISABLE_MSVC_C4127
 
-#define munit_assert_ptr_equal(a, b) \
-  munit_assert_ptr(a, ==, b)
-#define munit_assert_ptr_not_equal(a, b) \
-  munit_assert_ptr(a, !=, b)
-#define munit_assert_null(ptr) \
-  munit_assert_ptr(ptr, ==, NULL)
-#define munit_assert_not_null(ptr) \
-  munit_assert_ptr(ptr, !=, NULL)
-#define munit_assert_ptr_null(ptr) \
-  munit_assert_ptr(ptr, ==, NULL)
-#define munit_assert_ptr_not_null(ptr) \
-  munit_assert_ptr(ptr, !=, NULL)
+#define munit_assert_ptr_equal_impl(a, b, a_str, b_str) \
+  munit_assert_ptr_impl(a, ==, b, a_str, "==", b_str)
+#define munit_assert_ptr_not_equal_impl(a, b, a_str, b_str) \
+  munit_assert_ptr_impl(a, !=, b, a_str, "!=", b_str)
+#define munit_assert_null_impl(ptr, ptr_str) \
+  munit_assert_ptr_impl(ptr, ==, NULL, ptr_str, "==", "NULL")
+#define munit_assert_not_null_impl(ptr, ptr_str) \
+  munit_assert_ptr_impl(ptr, !=, NULL, ptr_str, "!=", "NULL")
+#define munit_assert_ptr_null_impl(ptr, ptr_str) \
+  munit_assert_ptr_impl(ptr, ==, NULL, ptr_str, "==", "NULL")
+#define munit_assert_ptr_not_null_impl(ptr, ptr_str) \
+  munit_assert_ptr_impl(ptr, !=, NULL, ptr_str, "!=", "NULL")
 
 /*** Memory allocation ***/
 
@@ -476,46 +476,87 @@ int munit_suite_main_custom(const MunitSuite* suite,
                             int argc, char* const argv[MUNIT_ARRAY_PARAM(argc + 1)],
                             const MunitArgument arguments[]);
 
+#define munit_assert(expr) munit_assert_impl(expr, #expr)
+#define munit_assert_true(expr) munit_assert_true_impl(expr, #expr)
+#define munit_assert_false(expr) munit_assert_false_impl(expr, #expr)
+#define munit_assert_char(a, op, b) munit_assert_char_impl(a, op, b, #a, #op, #b)
+#define munit_assert_uchar(a, op, b) munit_assert_uchar_impl(a, op, b, #a, #op, #b)
+#define munit_assert_short(a, op, b) munit_assert_short_impl(a, op, b, #a, #op, #b)
+#define munit_assert_ushort(a, op, b) munit_assert_ushort_impl(a, op, b, #a, #op, #b)
+#define munit_assert_int(a, op, b) munit_assert_int_impl(a, op, b, #a, #op, #b)
+#define munit_assert_uint(a, op, b) munit_assert_uint_impl(a, op, b, #a, #op, #b)
+#define munit_assert_long(a, op, b) munit_assert_long_impl(a, op, b, #a, #op, #b)
+#define munit_assert_ulong(a, op, b) munit_assert_ulong_impl(a, op, b, #a, #op, #b)
+#define munit_assert_llong(a, op, b) munit_assert_llong_impl(a, op, b, #a, #op, #b)
+#define munit_assert_ullong(a, op, b) munit_assert_ullong_impl(a, op, b, #a, #op, #b)
+#define munit_assert_size(a, op, b) munit_assert_size_impl(a, op, b, #a, #op, #b)
+#define munit_assert_float(a, op, b) munit_assert_float_impl(a, op, b, #a, #op, #b)
+#define munit_assert_double(a, op, b) munit_assert_double_impl(a, op, b, #a, #op, #b)
+#define munit_assert_ptr(a, op, b) munit_assert_ptr_impl(a, op, b, #a, #op, #b)
+
+#define munit_assert_int8(a, op, b) munit_assert_int8_impl(a, op, b, #a, #op, #b)
+#define munit_assert_uint8(a, op, b) munit_assert_uint8_impl(a, op, b, #a, #op, #b)
+#define munit_assert_int16(a, op, b) munit_assert_int16_impl(a, op, b, #a, #op, #b)
+#define munit_assert_uint16(a, op, b) munit_assert_uint16_impl(a, op, b, #a, #op, #b)
+#define munit_assert_int32(a, op, b) munit_assert_int32_impl(a, op, b, #a, #op, #b)
+#define munit_assert_uint32(a, op, b) munit_assert_uint32_impl(a, op, b, #a, #op, #b)
+#define munit_assert_int64(a, op, b) munit_assert_int64_impl(a, op, b, #a, #op, #b)
+#define munit_assert_uint64(a, op, b) munit_assert_uint64_impl(a, op, b, #a, #op, #b)
+
+#define munit_assert_double_equal(a, b, precision) munit_assert_double_equal_impl(a, b, precision, #a, #b, #precision)
+#define munit_assert_string_equal(a, b) munit_assert_string_equal_impl(a, b, #a, #b)
+#define munit_assert_string_not_equal(a, b) munit_assert_string_not_equal_impl(a, b, #a, #b)
+#define munit_assert_memory_equal(size, a, b) munit_assert_memory_equal_impl(size, a, b, #a, #b)
+#define munit_assert_memory_not_equal(size, a, b) munit_assert_memory_not_equal_impl(size, a, b, #a, #b)
+#define munit_assert_ptr_equal(a, b) munit_assert_ptr_equal_impl(a, b, #a, #b)
+#define munit_assert_ptr_not_equal(a, b) munit_assert_ptr_not_equal_impl(a, b, #a, #b)
+#define munit_assert_ptr_null(ptr) munit_assert_ptr_null_impl(ptr, #ptr)
+#define munit_assert_ptr_not_null(ptr) munit_assert_ptr_not_null_impl(ptr, #ptr)
+
+#define munit_assert_null(ptr) munit_assert_null_impl(ptr, #ptr)
+#define munit_assert_not_null(ptr) munit_assert_not_null_impl(ptr, #ptr)
+
+
 #if defined(MUNIT_ENABLE_ASSERT_ALIASES)
 
-#define assert_true(expr) munit_assert_true(expr)
-#define assert_false(expr) munit_assert_false(expr)
-#define assert_char(a, op, b) munit_assert_char(a, op, b)
-#define assert_uchar(a, op, b) munit_assert_uchar(a, op, b)
-#define assert_short(a, op, b) munit_assert_short(a, op, b)
-#define assert_ushort(a, op, b) munit_assert_ushort(a, op, b)
-#define assert_int(a, op, b) munit_assert_int(a, op, b)
-#define assert_uint(a, op, b) munit_assert_uint(a, op, b)
-#define assert_long(a, op, b) munit_assert_long(a, op, b)
-#define assert_ulong(a, op, b) munit_assert_ulong(a, op, b)
-#define assert_llong(a, op, b) munit_assert_llong(a, op, b)
-#define assert_ullong(a, op, b) munit_assert_ullong(a, op, b)
-#define assert_size(a, op, b) munit_assert_size(a, op, b)
-#define assert_float(a, op, b) munit_assert_float(a, op, b)
-#define assert_double(a, op, b) munit_assert_double(a, op, b)
-#define assert_ptr(a, op, b) munit_assert_ptr(a, op, b)
+#define assert_true(expr) munit_assert_true_impl(expr)
+#define assert_false(expr) munit_assert_false_impl(expr)
+#define assert_char(a, op, b) munit_assert_char_impl(a, op, b, #a, #op, #b)
+#define assert_uchar(a, op, b) munit_assert_uchar_impl(a, op, b, #a, #op, #b)
+#define assert_short(a, op, b) munit_assert_short_impl(a, op, b, #a, #op, #b)
+#define assert_ushort(a, op, b) munit_assert_ushort_impl(a, op, b, #a, #op, #b)
+#define assert_int(a, op, b) munit_assert_int_impl(a, op, b, #a, #op, #b)
+#define assert_uint(a, op, b) munit_assert_uint_impl(a, op, b, #a, #op, #b)
+#define assert_long(a, op, b) munit_assert_long_impl(a, op, b, #a, #op, #b)
+#define assert_ulong(a, op, b) munit_assert_ulong_impl(a, op, b, #a, #op, #b)
+#define assert_llong(a, op, b) munit_assert_llong_impl(a, op, b, #a, #op, #b)
+#define assert_ullong(a, op, b) munit_assert_ullong_impl(a, op, b, #a, #op, #b)
+#define assert_size(a, op, b) munit_assert_size_impl(a, op, b, #a, #op, #b)
+#define assert_float(a, op, b) munit_assert_float_impl(a, op, b, #a, #op, #b)
+#define assert_double(a, op, b) munit_assert_double_impl(a, op, b, #a, #op, #b)
+#define assert_ptr(a, op, b) munit_assert_ptr_impl(a, op, b, #a, #op, #b)
 
-#define assert_int8(a, op, b) munit_assert_int8(a, op, b)
-#define assert_uint8(a, op, b) munit_assert_uint8(a, op, b)
-#define assert_int16(a, op, b) munit_assert_int16(a, op, b)
-#define assert_uint16(a, op, b) munit_assert_uint16(a, op, b)
-#define assert_int32(a, op, b) munit_assert_int32(a, op, b)
-#define assert_uint32(a, op, b) munit_assert_uint32(a, op, b)
-#define assert_int64(a, op, b) munit_assert_int64(a, op, b)
-#define assert_uint64(a, op, b) munit_assert_uint64(a, op, b)
+#define assert_int8(a, op, b) munit_assert_int8_impl(a, op, b, #a, #op, #b)
+#define assert_uint8(a, op, b) munit_assert_uint8_impl(a, op, b, #a, #op, #b)
+#define assert_int16(a, op, b) munit_assert_int16_impl(a, op, b, #a, #op, #b)
+#define assert_uint16(a, op, b) munit_assert_uint16_impl(a, op, b, #a, #op, #b)
+#define assert_int32(a, op, b) munit_assert_int32_impl(a, op, b, #a, #op, #b)
+#define assert_uint32(a, op, b) munit_assert_uint32_impl(a, op, b, #a, #op, #b)
+#define assert_int64(a, op, b) munit_assert_int64_impl(a, op, b, #a, #op, #b)
+#define assert_uint64(a, op, b) munit_assert_uint64_impl(a, op, b, #a, #op, #b)
 
-#define assert_double_equal(a, b, precision) munit_assert_double_equal(a, b, precision)
-#define assert_string_equal(a, b) munit_assert_string_equal(a, b)
-#define assert_string_not_equal(a, b) munit_assert_string_not_equal(a, b)
-#define assert_memory_equal(size, a, b) munit_assert_memory_equal(size, a, b)
-#define assert_memory_not_equal(size, a, b) munit_assert_memory_not_equal(size, a, b)
-#define assert_ptr_equal(a, b) munit_assert_ptr_equal(a, b)
-#define assert_ptr_not_equal(a, b) munit_assert_ptr_not_equal(a, b)
-#define assert_ptr_null(ptr) munit_assert_null_equal(ptr)
-#define assert_ptr_not_null(ptr) munit_assert_not_null(ptr)
+#define assert_double_equal(a, b, precision) munit_assert_double_equal(a, b, precision, #a, #b, #precision)
+#define assert_string_equal(a, b) munit_assert_string_equal_impl(a, b, #a, #b)
+#define assert_string_not_equal(a, b) munit_assert_string_not_equal_impl(a, b, #a, #b)
+#define assert_memory_equal(size, a, b) munit_assert_memory_equal_impl(size, a, b, #size, #a, #b)
+#define assert_memory_not_equal(size, a, b) munit_assert_memory_not_equal_impl(size, a, b, #size, #a, #b)
+#define assert_ptr_equal(a, b) munit_assert_ptr_equal_impl(a, b, #a, #b)
+#define assert_ptr_not_equal(a, b) munit_assert_ptr_not_equal_impl(a, b, #a, #b)
+#define assert_ptr_null(ptr) munit_assert_ptr_null_impl(ptr, #ptr)
+#define assert_ptr_not_null(ptr) munit_assert_ptr_not_null_impl(ptr, #ptr)
 
-#define assert_null(ptr) munit_assert_null(ptr)
-#define assert_not_null(ptr) munit_assert_not_null(ptr)
+#define assert_null(ptr) munit_assert_null_impl(ptr, #ptr)
+#define assert_not_null(ptr) munit_assert_not_null_impl(ptr, #ptr)
 
 #endif /* defined(MUNIT_ENABLE_ASSERT_ALIASES) */
 
@@ -529,5 +570,5 @@ int munit_suite_main_custom(const MunitSuite* suite,
 #  if defined(assert)
 #    undef assert
 #  endif
-#  define assert(expr) munit_assert(expr)
+#  define assert(expr) munit_assert_impl(expr, #expr)
 #endif
