@@ -230,8 +230,8 @@ void munit_errorf_ex(const char* filename, int line, const char* format, ...);
 
 #define munit_assert_type_full_impl(prefix, suffix, T, fmt, a, op, b, a_str, op_str, b_str)   \
   do { \
-    T munit_tmp_a_ = (a); \
-    T munit_tmp_b_ = (b); \
+    T munit_tmp_a_ = (T)(a); \
+    T munit_tmp_b_ = (T)(b); \
     if (!(munit_tmp_a_ op munit_tmp_b_)) {                               \
       munit_errorf("assertion failed: " a_str " " op_str " " b_str " (" prefix "%" fmt suffix " " op_str " " prefix "%" fmt suffix ")", \
                    munit_tmp_a_, munit_tmp_b_); \
