@@ -287,8 +287,6 @@ munit_malloc_ex(const char* filename, int line, size_t size) {
 
 /*** Timer code ***/
 
-#if defined(MUNIT_ENABLE_TIMING)
-
 #define psnip_uint64_t munit_uint64_t
 #define psnip_uint32_t munit_uint32_t
 
@@ -749,6 +747,7 @@ psnip_clock_get_time (enum PsnipClockType clock_type, struct PsnipClockTimespec*
 
 #endif /* !defined(PSNIP_CLOCK_H) */
 
+#if defined(MUNIT_ENABLE_TIMING)
 static psnip_uint64_t
 munit_clock_get_elapsed(struct PsnipClockTimespec* start, struct PsnipClockTimespec* end) {
   psnip_uint64_t r = (end->seconds - start->seconds) * PSNIP_CLOCK_NSEC_PER_SEC;
@@ -759,8 +758,7 @@ munit_clock_get_elapsed(struct PsnipClockTimespec* start, struct PsnipClockTimes
   }
   return r;
 }
-
-#endif /* defined(MUNIT_ENABLE_TIMING) */
+#endif
 
 /*** PRNG stuff ***/
 
@@ -1059,10 +1057,12 @@ munit_parameters_get(const MunitParameter params[], const char* key) {
   return NULL;
 }
 
+#if defined(MUNIT_ENABLE_TIMING)
 static void
 munit_print_time(FILE* fp, munit_uint64_t nanoseconds) {
   fprintf(fp, "%" MUNIT_TEST_TIME_FORMAT, ((double) nanoseconds) / ((double) PSNIP_CLOCK_NSEC_PER_SEC));
 }
+#endif
 
 /* Add a paramter to an array of parameters. */
 static MunitResult
